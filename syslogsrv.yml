@@ -1,0 +1,18 @@
+---
+- hosts: "all"
+  become: true
+  tasks:
+    - name: "Install rsyslog"
+      ansible.builtin.apt:
+       name: "rsyslog"
+       state: "latest"
+       update_cache: true
+    - name: Setting rsyslog
+      lineinfile: dest=/etc/rsyslog.conf regexp='^#?module(load="imudp")' line=>
+    - lineinfile: dest=/etc/rsyslog.conf regexp='^#?input(type="imudp" port="51>
+    - lineinfile: dest=/etc/rsyslog.conf regexp='^#?module(load="imtcp")' line=>
+    - lineinfile: dest=/etc/rsyslog.conf regexp='^#?input(type="imtcp" port="51>
+    - lineinfile: dest=/etc/rsyslog.conf regexp='^#?input(type="imtcp" port="51>
+    - lineinfile: dest=/etc/rsyslog.conf regexp='^#?input(type="imtcp" port="51>
+    - name: "rsyslog"
+      command: systemctl restart rsyslog
