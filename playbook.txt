@@ -1,0 +1,126 @@
+---
+- hosts: "all"
+  become: true
+  tasks:
+    - name: "Update"
+      ansible.builtin.apt:
+       update_cache: true
+
+    - name: "Install curl"
+      ansible.builtin.apt:
+       name: "curl"
+       state: "latest"
+       update_cache: true
+    - name: "localtimeMoscow"
+      command: ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+    - ufw:
+       state: enabled
+    - ufw:
+       rule: allow
+       port: 80
+       proto: tcp
+    - ufw:
+       rule: allow
+       port: 8080
+       proto: tcp
+    - ufw:
+       rule: allow
+       port: 1467
+       proto: tcp
+    - ufw:
+       rule: allow
+       port: 514
+       proto: tcp
+    - ufw:
+       rule: allow
+       port: 3306
+       proto: tcp
+    - name: "Install rsyslog"
+      ansible.builtin.apt:
+       name: "rsyslog"
+       state: "latest"
+       update_cache: true
+    - name: "zabbix wget"
+      command: wget https://repo.zabbix.com/zabbix/5.0/ubuntu/pool/main/z/zabbi>
+    - name: "Zabbix deb"
+      command: sudo dpkg -i zabbix-release_5.0-1+focal_all.deb
+    - name: "Update"
+      ansible.builtin.apt:
+       update_cache: true
+    - name: "Install zabbix"
+      ansible.builtin.apt:
+       name: "zabbix-agent"
+       state: "latest"
+       update_cache: true
+    - name: "Zabbix stop"
+      command: systemctl stop zabbix-agent
+    - name: "Zabbix disable"
+      command: systemctl disable zabbix-agent
+    - name: "SSH"
+      lineinfile: dest=/etc/ssh/sshd_config regexp='^#?Port' line='Port 1467'
+    - lineinfile: dest=/etc/ssh/sshd_config regexp='^#?PubkeyAuthentication' li>
+    - name: "Add user to remote hosts"
+      user: name=Webdeveloper groups=sudo shell=/bin/bash password=$6$b.zuwUKts>
+    - name: "??????? 2048-??????? SSH ???? ??? lnxcfg ? 
+      user:
+         name: Webdeveloper
+         generate_ssh_key: yes
+         ssh_key_bits: 2048
+         ssh_key_file: .ssh/id_rsa
+
+    - name: "Add user to remote hosts 2"
+      user: name=Devopsengineer groups=sudo shell=/bin/bash password=$6$fAr5QMx>
+    - name: "2 ??????? 2048-??????? SSH ???? ??? lnxcfg ? ~lnxcfg/.ssh/id_rsa"
+      user:
+         name: Devopsengineer
+         generate_ssh_key: yes
+         ssh_key_bits: 2048
+         ssh_key_file: .ssh/id_rsa
+
+    - name: "3 Add user to remote hosts"
+      user: name=Projectmanager groups=sudo shell=/bin/bash password=$6$cW.S.XQ>
+    - name: "3 ??????? 2048-??????? SSH ???? ??? lnxcfg ? ~lnxcfg/.ssh/id_rsa"
+      user:
+         name: Projectmanager
+         generate_ssh_key: yes
+         ssh_key_bits: 2048
+         ssh_key_file: .ssh/id_rsa
+    - name: add gpg keys
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+    - name: add repo
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal >
+        state: present
+    - name: "Update"
+      ansible.builtin.apt:
+       update_cache: true
+    - name: install docker
+      apt:
+        name: docker-ce
+        state: present
+    - name: "Install git"
+      ansible.builtin.apt:
+       name: "git"
+       state: "latest"
+       update_cache: true
+    - name: "copy"
+      command: mkdir /skillcloud-ngsite
+    - name: "Copy git"
+      command: git clone https://github.com/Jeniston14/wsr-skillcloud-moscow /s>
+    - name: "chmod"
+      command: chmod 777 /skillcloud-ngsite/docker-compose.sh
+    - name: "start"
+      command: sh /skillcloud-ngsite/docker-compose.sh
+    - name: "ufw"
+      command: systemctl restart ufw
+    - name: "ssh"
+      command: systemctl restart sshd
+    - name: "Reboot host and wait for it to restart"
+      command: reboot
+
+
+
+
+
